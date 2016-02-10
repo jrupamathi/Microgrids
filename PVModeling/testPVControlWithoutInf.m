@@ -6,18 +6,21 @@ omega0=1;
 CTL = 0.01;
 RTL = 1e-4;
 LTL = 0.1;
-VdrefArr = [1.05  0.95 1];
+VdrefArr = [1.15  0.75 1];
 RR = 0.4; LR = 0.1;
-tArray = [0 0.5 1 1.5];
+k1 = LR*0.1; k2 = LR*0.1;
+c1 = 0.01; c2 = 0.01;
+
+tArray = [0 0.2 0.4 0.6];
 Kgp = 0.2519;
 Kgq = 0.2632;
-x0= [1;0;1;0;1;0;0;0; 1;0];
+x0= rand(10,1)
 t=[]; x=[];
 for j = 1:numel(VdrefArr)
     Vd = VdrefArr(j);
     factor = Vd/1.12;
 %Kp1 = 0.1/(0.85*factor); Ki1 = 1/(1.35*factor); Kp2 = 1/(0.5*factor); Ki2 = 1/(2*factor);
- Kp1 = 0.04; Ki1 = 0.2;
+ Kp1 = 0.02; Ki1 = 0.2;
  Kp2 = 0.4; Ki2 = 0.25;
 %Kp1 = 0.002/(0.85*factor); Ki1 = 0.2/(1.35*factor); Kp2 = 0.002/(0.5*factor); Ki2 = 0.2/(2*factor);
 tspan = [tArray(j) tArray(j+1)];
@@ -28,7 +31,7 @@ x = [x, xStep'];
 end
 
 
-function [dx,alpha,Vcstar] = PVDynamics(t,x,Power)
+function [dx] = PVDynamics(t,x,Power)
 vTLLd = x(1);
 vTLLq = x(2);
 iTLMd = x(3);
@@ -56,10 +59,11 @@ Vt = sqrt(vTLLd^2+ vTLLq^2);
 delPdt = Pref - P;
 %delQdt = Qref - Q;
 delQdt = Vref - Vt;
-
-alpha = Kp1*(Pref - P) + Ki1* delPInt;
+slide1 = delPdt + c1*delPInt;
+slide2 = delQdt + c2*delQInt;
+alpha = Kp1*(Pref - P) + Ki1* delPInt + k1*sign(slide1);
 %Vcstar = (1+ Kp2*(Qref-Q) + Ki2*delQInt)*sqrt(vTLLd^2+ vTLLq^2);
-Vcstar = (1+ Kp2*(Vref-Vt) + Ki2*delQInt)*Vt;
+Vcstar = (1+ Kp2*(Vref-Vt) + Ki2*delQInt)*Vt + k2*sign(slide2);
 vRLd = Vcstar*cos(alpha);
 vRLq = Vcstar*sin(alpha);
 vRRd = vTLLd; vRRq = vTLLq;

@@ -1,8 +1,12 @@
-PL_PV21= -0.1/4;
-QL_PV21=-0.01/4;
-RL_PV21 = 3*PL_PV21/(PL_PV21^2 + QL_PV21^2);
-LL_PV21 = 3*QL_PV21/(PL_PV21^2 + QL_PV21^2);
-save('PV21.mat', 'RL_PV21', 'LL_PV21');
+RR_PV21= 0.4;
+LR_PV21=0.1;
+Pref_PV21 = 3/4;
+Vref_PV21 = 1.15;
+k1_PV21 = LR_PV21*0.1; k2_PV21 = LR_PV21*0.1;
+c1_PV21= 0.01; c2_PV21 = 0.01;
+Kp1_PV21 = 0.02; Ki1_PV21 = 0.2;
+Kp2_PV21 = 0.4; Ki2_PV21 = 0.25;
+save('PV21.mat', 'RR_PV21','LR_PV21','Pref_PV21', 'Vref_PV21','Kp1_PV21','Ki1_PV21','Kp2_PV21','Ki2_PV21','c1_PV21','c2_PV21','k1_PV21','k2_PV21');
 
 PL_B20= 0;
 QL_B20=0;
