@@ -32,7 +32,7 @@ L14 = Load({'_L14'},phi,dphidt);
 L15 = Load({'_L15'},phi,dphidt);
 L13 = Load({'_L13'},phi,dphidt);
 L12 = Load({'_L12'},phi,dphidt);
-PV21 = PV({'_PV21'},phi,dphidt);
+PV21 = Load({'_PV21'},phi,dphidt);
 L11 = Load({'_L11'},phi,dphidt);
 
 % Modules
@@ -65,4 +65,4 @@ Buses = {Bus1, Bus2, Bus5, Bus16, Bus17, Bus18, Bus19,Bus14, Bus15, Bus13, Bus12
 G = ProduceGMatrix(Modules,Buses);
  
 PS = PowerSystem(G,Modules);
-PS.PrintMFileWithStateSpace(PS,'Equations/Step6.txt')
+PS.PrintMFileWithStateSpace(PS,'Equations/WithoutIM.txt')

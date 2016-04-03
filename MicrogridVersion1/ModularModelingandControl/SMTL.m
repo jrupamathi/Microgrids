@@ -3,7 +3,7 @@ clear classes
 syms phi dphidt real
 
 % Generators
-G23 = SM7State1({'_G23'},phi,dphidt);
+G23 = SM7State({'_G23'},phi,dphidt);
 
 % Transmission Lines
 % Bus 2
