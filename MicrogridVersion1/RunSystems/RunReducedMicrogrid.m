@@ -8,7 +8,7 @@ addpath('../Parameters')
 load('G1.mat','Lad_G1','Laf_G1','Laq_G1','Ldf_G1','LSd_G1','LSq_G1','LRD_G1','LF_G1','LRQ_G1','RS_G1','RR_G1','RF_G1','H_G1','B_G1')
 load('G2.mat','Lad_G2','Laf_G2','Laq_G2','Ldf_G2','LSd_G2','LSq_G2','LRD_G2','LF_G2','LRQ_G2','RS_G2','RR_G2','RF_G2','H_G2','B_G2')
 
-RL_PV3 = -0.1; 
+RL_PV3 = -0.01875; 
 LL_PV3 = -0.01;
 
 RL_L1 = 0.0103; 

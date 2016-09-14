@@ -24,7 +24,7 @@ x0= 0.5*ones(10,1)
  Kp2 = 0.4; Ki2 = 0.25;
 %Kp1 = 0.002/(0.85*factor); Ki1 = 0.2/(1.35*factor); Kp2 = 0.002/(0.5*factor); Ki2 = 0.2/(2*factor);
 % tspan = [tArray(j) tArray(j+1)];
-tspan = [0,1];
+tspan = [0,0.1];
 [t,x] = ode45(@(t,x)PVDynamics(t,x),tspan,x0);
 % x0 = xStep(end,:);
 % t = [t,tStep'];
@@ -75,9 +75,26 @@ diRqdt = (vRLq - RR*iRq - vRRq)/LR - omega0*iRd;
             
             dx = 377*[dvTLLddt ; dvTLLqdt ; diTLMddt ; diTLMqdt;...
                 diRddt;diRqdt;delPdt;delQdt;dvTLRddt ; dvTLRqdt]; 
-            plot(t,x(7),'b*',t,x(8),'r*');hold on;
+%             plot(t,x(7),'b*',t,x(8),'r*');hold on;
 
 end
+I = sqrt(x(:,1).^2 + x(:,2).^2);
+V = sqrt(x(:,5).^2 + x(:,6).^2);
+figure(1)
+plot(t,I,'b',t,V,'r');
+xlabel('Time(in seconds)');
+ylabel('in p.u.');
+title('PV voltage and current magnitudes');
+legend('PV current', 'PV Terminal voltage');
+
+figure(2);
+P = x(:,5).*x(:,1) + x(:,6).*x(:,2);
+Q = x(:,6).*x(:,1) - x(:,5).*x(:,2);
+plot(t,P,t,Q)
+xlabel('Time(in seconds)')
+ylabel('in p.u.')
+title('PV real and reactive power output');
+legend('PV real power', 'PV reactive power');
 
 save('dataPV.mat')
 end

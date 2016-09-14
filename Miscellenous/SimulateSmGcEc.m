@@ -1,7 +1,7 @@
 function SimulateSmGcEc
 load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','RR_G23','RF_G23','H_G23','B_G23')
 
-tspan = [0,25];
+tspan = [0,1];
 %Governor parameters
 T1 = 0.01*377;
 T2 = 0.02*377;
@@ -14,11 +14,11 @@ k = 10;
 %Exciatation control parameters
 Tr = 0.02*377;
 Ka = 200;
-Ta = 0.02*377;
+Ta = 2e-7*377;%0.02*377;
 Ke = 1;
 Te = 0;
-Kf = 0.001;
-Tf = 0.1*377;
+Kf = 0;%0.001;
+Tf = 1e-12*377;%0.1*377;
 
 
 Vref = 1;
@@ -32,23 +32,23 @@ iTLMq_TL_2_23 = 0;%-0.01;
 
 % x0 =    [1.6841    0.2062   0    -0.0006    1.3    1.0475    0.9274    1.0527   0.02997  0.03    0    0.001  Vfield0    Vref  ...
 %     Kf*Vfield0 1 0.04772];
-x0 = [0.0100
-   -0.0010
-    0.0000
-   -0.0000
-    0.3410
+x0 = [-0.0299
+   -0.0040
+   -0.0701
+    0.0041
+    0.5533
     1.4681
     1.0000
-    0.0132
+    0.0133
+    0.0004
+    0.0130
+    0.0001
+    0.0001
+   -2.6854
+    1.0134
          0
-         0
-    0.0000
-    0.0000
-   -0.0015
-    1.0012
-   -0.0000
-   -0.1028
-   -0.9959];
+   -0.9467
+   -1.0689];
 tic;
 [t,x] = ode45(@GCDynamics,tspan,x0);
 toc
@@ -126,7 +126,7 @@ dxcdt = (Vt - xc)/Tr;
 defddt = (Ka*xa - efd)/Ta;
 dxddt = (Kf*defddt/Ke - xd)/Tf;
 
-plot(t,efd,'b*'); hold on;
+plot(t,omega_G23,'b*'); hold on;
 dx = [diSd_G23dt
 diSq_G23dt
 diRd_G23dt

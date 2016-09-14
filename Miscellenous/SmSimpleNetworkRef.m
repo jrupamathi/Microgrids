@@ -23,15 +23,6 @@ Lkq1 = Llkq1 + Lmq;
 Lkq2 = Llkq1 + Lmq;
 Rkq2 = 0.03365;
 
-%Governor parameters
-T1 = 0.01;
-T2 = 0.02;
-T3 = 0.2;
-T4 = 0.25;
-T5 = 0.009;
-T6 = 0.0384;
-k = 10;
-
 t0 = [0;5];
 x0 = zeros(8,1);
 x0(8) = 1;
@@ -86,12 +77,12 @@ ohm = [0 -omega 0 0 0 0;
 
 dpsidt =  [V -  R*I - ohm*psi];
 dIdt = inv(L)* dpsidt;
-% Te = (psi(1)*I(2) - psi(2)*I(1));
-Te = 1.5*(V_d*I_d + V_q*I_q);
+Te = (psi(1)*I(2) - psi(2)*I(1));
+% Te = (V_d*I_d + V_q*I_q);
 ddeltadt = 377*(omega-1);
 domegadt = (Pm/omega -Te)/(2*H);
 dI_sysdt = 377*((Tm2s)*dIdt(1:2) + Tm2sderi*I(1:2));
-dx = [dI_sysdt;dIdt(3:end); ddeltadt; domegadt];
+dx = [dI_sysdt;377*dIdt(3:end); ddeltadt; domegadt];
 
 end
 save('SMDataNetwork.mat')

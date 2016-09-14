@@ -57,8 +57,8 @@ omega0 = 1;
 
 %Generator Initial Conditions
 
-syms delta omega iD iF iQ vf Tm vds vqs Id Iq
-syms Kt a Tt r Tg omegaRef
+syms delta omega iD iF iQ vf Tm vds vqs Id Iq real
+syms Kt a Tt r Tg omegaRef real
 delta2 = 2*delta;
 
 Park = [sin(delta) cos(delta); -cos(delta) sin(delta)];
@@ -78,7 +78,7 @@ I = [Id; Iq];
 i = [iD; iF; iQ];
 % vd = 1.19997;vq=0.02207; % From Load flow
 % vd = 1; vq = 0;
-syms vds vqs;
+syms vds vqs real;
 V = [vds; vqs];
 
 Idot = wb.*((-A1+B1*w+C1*Rark+D1*w*Rark-w_wo)*I...
@@ -105,10 +105,17 @@ Jy = jacobian(xdot,y);
 Ju=jacobian(xdot,u);
 %%
 %For finding equilibrium
-% vd = 1;vq=0; % From Load flow
-% I=solve(1.5*[vd*Id+ vq*Iq ;vq*Id- vd*Iq] - [-3.5/4;-0.2/4]); % From Load flow
-clear I
-I.Id = -0.1; I.Iq = -0.0095; vd = 1; vq = 0;
+Vmag = 1.007; Vang = -0.96564*pi/180;
+Vdref = Vmag*cos(Vang);
+Vqref = Vmag*sin(Vang);
+Pref = 0.1872;
+Qref = 0.088656;
+
+vd = Vdref;vq=Vqref; % From Load flow
+I=solve([vd*Id+ vq*Iq ;vq*Id- vd*Iq] - [Pref;Qref]); % From Load flow
+% clear I
+% I.Id = -0.1; I.Iq = -0.0095; 
+% vd = 1; vq = 0;
 step1=subs(xdot,[Id;Iq;vds;vqs],[I.Id;I.Iq;vd;vq]);
 Equi=solve(step1);
 Tm0=Equi.Tm; delta0=Equi.delta; iD0=Equi.iD; iF0=Equi.iF; iQ0=Equi.iQ; 

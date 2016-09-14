@@ -25,17 +25,18 @@ tic
 %     -1.0; -0.0095; 1.472e-15;  4.054e-16;-1.56; -1.214; 1.0;...
 %     ...%-1;0;
 %     ];%0.006;0];%0;0.0067];
-x0=0.7*[   -0.0993    0.0007    1.0271   -0.0778   -0.1000   -0.0095    1.0258   -0.0873   -0.0983    0.0110    0.0000...
-   -0.0000   -0.3884   -0.3418    1.0000]';
-tspan = [0 1];
+% x0=[   -0.0993    0.0007    1.0271   -0.0778   -0.1000   -0.0095    1.0258   -0.0873   -0.0983    0.0110    0.0000...
+%    -0.0000   -0.3884   -0.3418    1.0000]';
+x0 = [-1.066; -0.002081; 0.7419; 6.604;-1;-0.0095;0.7315; 6.497;-1.131;0.005234;0;0;-0.6209;1.37;1];
+tspan = [0 0.7];
 [t,x] = ode45(@(t,x)PVDynamics(t,x),tspan,x0);
 toc
 
 function [dx] = PVDynamics(t,x,vTLRd)
 iTLMd = x(1);
 iTLMq = x(2);
-vTLRd = 1;%x(3);
-vTLRq = 0;%x(4);
+vTLRd = x(3);
+vTLRq = x(4);
 id = x(5);
 iq = x(6);
 vTLLd = x(7);
@@ -60,14 +61,15 @@ dphidt = omega0;
 % vTLLd = 1; vTLLq = 0;
 iInRd = -id; iInRq = -iq;
 Vs = 1; id_star = -1; iq_star = -0.0095;
-R = 0.002; L=0.01;
+R = 0.5;
+L = 0.005;
 iInLd = iSd_G23; iInLq = iSq_G23; 
             dvTLLddt = (iInLd - iTLMd)/CTL + dphidt*vTLLq;
             dvTLLqdt = (iInLq - iTLMq)/CTL - dphidt*vTLLd;
             diTLMddt = dphidt*iTLMq - (vTLRd - vTLLd + RTL*iTLMd)/(LTL);
             diTLMqdt = - dphidt*iTLMd - (vTLRq - vTLLq + RTL*iTLMq)/(LTL);
-            dvTLRddt = 0;%(iInRd + iTLMd)/CTL + dphidt*vTLRq;
-            dvTLRqdt = 0;%(iInRq + iTLMq)/CTL - dphidt*vTLRd;
+            dvTLRddt = (iInRd + iTLMd)/CTL + dphidt*vTLRq;
+            dvTLRqdt = (iInRq + iTLMq)/CTL - dphidt*vTLRd;
 
             ud = -(2*(R*id_star - L*iq_star*dphidt))/Vs;
             uq = -(2*(R*iq_star + L*id_star*dphidt))/Vs;

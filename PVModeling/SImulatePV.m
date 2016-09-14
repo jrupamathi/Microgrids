@@ -1,6 +1,6 @@
 function SImulatePV
 
-PPV = 3.5/4; QPV = 0.1;
+PPV = 3.5/4; QPV = 0.01;
 CTL = 0.01;
 RTL = 0.0099;
 LTL = 0.01;% + 0.004;
@@ -26,12 +26,15 @@ iTLMq = x(4);
 iPVd = x(5);
 iPVq = x(6);
 
-vPVd = vTLLd; vPVq = vTLLq;
+vPVd1 = real((-5.32-1i*2)*(iPVd+1i*iPVq));%vTLLd; 
+vPVq1 = imag((-5.32-1i*2)*(iPVd+1i*iPVq));%vTLLq;
+vPVd = vTLLd; 
+vPVq = vTLLq;
 % vPVd1 = vTLLd; vPVq1 = vTLLq;
-vPVd1 = 1; vPVq1 = 0;
-RPV = -(vPVd1^2 + vPVq1^2)*PPV/(PPV^2 + QPV^2);
+% vPVd1 = 1; vPVq1 = 0;
+RPV = (vPVd1^2 + vPVq1^2)*PPV/(PPV^2 + QPV^2);
 % LPV = -LTL - (CTL*RTL*RPV) -0.1;
-LPV = -(vPVd1^2 + vPVq1^2)*QPV/(PPV^2 + QPV^2);
+LPV = (vPVd1^2 + vPVq1^2)*QPV/(PPV^2 + QPV^2);
 iInLd = -iPVd; iInLq = -iPVq;
 vTLRd = 1; vTLRq = 0;
 dvTLLddt = (iInLd - iTLMd)/CTL + omega0*vTLLq;
@@ -44,6 +47,9 @@ diPVqdt = (vPVq - RPV*iPVq)/LPV - omega0*iPVd;
             
 dx = 377*[dvTLLddt; dvTLLqdt;diTLMddt;diTLMqdt;...
     diPVddt;diPVqdt];%delPdt;delQdt]; 
-end 
+end
+I = sqrt(x(:,5).^2 + x(:,6).^2);
+V = sqrt(x(:,1).^2 + x(:,2).^2);
+plot(t,I,'b',t,V,'r')
 save('PVdata.mat')
 end

@@ -4,12 +4,17 @@ H = 0.3222;
 F = 0.01322;
 rs = 0.01524;
 rf = 0.004319;
-rr = 0.2343;
+Rkd = 0.2343;
+Rkq = 0.03365;
+% rr = (Rkd+Rkq)/2;%0.2343;
+% Rkd = rr;
+% Rkq = rr;
+% Rkq = Rkd;
 
-Ld = 2.8252;
+Ld = 2.89;
 LD = 5.465;         
 LF = 3.341;
-Lq = 1.6552;
+Lq = 1.72;
 LQ = 1.8808;         
 
 Lad = 2.81;
@@ -30,7 +35,7 @@ A1 = [rs*c1 0; 0 rs*c1];
 B1 = [d1 0; 0 d1];
 C1 = [rs*c2 0; 0 rs*c2];
 D1 = [d2 0; 0 d2];
-F1 = [-l(1,2)*rr -l(1,3)*rf 0; 0 0 -l(4,5)*rr];
+F1 = [-l(1,2)*Rkd -l(1,3)*rf 0; 0 0 -l(4,5)*Rkq];
 H1 = [l(4,4)*L(1,2) l(4,4)*L(1,3) 0; 0 0 l(1,1)*L(4,5)];
 M1 = [c1 0; 0 c1];
 N1 = [c2 0; 0 c2];
@@ -38,7 +43,7 @@ K1 = l(1,3);
 
 C2 = [-l(2,1)*rs 0; -l(3,1)*rs 0; 0 -l(5,4)*rs];
 D2 = [l(5,4)*L(1,1) 0; 0 l(2,1)*L(4,4); 0 l(3,1)*L(4,4)];
-F2 = [-l(2,2)*rr -l(2,3)*rf 0; -l(3,2)*rr -l(3,3)*rf 0; 0 0 -l(5,5)*rr];
+F2 = [-l(2,2)*Rkd -l(2,3)*rf 0; -l(3,2)*Rkd -l(3,3)*rf 0; 0 0 -l(5,5)*Rkq];
 H2 = [ l(5,4)*L(1,2) l(5,4)*L(1,3) 0; 0 0 l(2,1)*L(4,5); 0 0 l(3,1)*L(4,5)];
 N2 = [-l(2,1) 0; -l(3,1) 0; 0 -l(5,4)];
 K2 = [l(2,3); l(3,3); 0];
@@ -47,11 +52,11 @@ K2 = [l(2,3); l(3,3); 0];
 wb = 377;
 omega0 = 1;
 
-x0 = ones(7,1);
+RL = 0.5029;
+x0 = zeros(7,1);
 x0(2) = 1;
-x0(1) = 1;
 Pm = 0.8;
-t0 = [0; 10];
+t0 = [0; 5];
 % generator inputs
 
 [t,x]=ode45(@Milosdynamics,t0,x0);
@@ -66,9 +71,8 @@ iD = x(5);
 iF = x(6);
 iQ = x(7);
 vf= 0.001;%%x(14);
-vds = 1; vqs = 0;
-
-% delta =(deltas-pi);
+t
+% delta =(deltas+pi/2);
 % %Transformation matrix
 % Ts2m = [sin(delta) -cos(delta);
 %     cos(delta)  sin(delta)];
@@ -77,14 +81,14 @@ vds = 1; vqs = 0;
 
 % delta =(deltas-pi);
 delta2 = 2*(delta);
- vds = 1; vqs = 0;
+ vds = 1;%Id*RL; 
+ vqs = 0;%Iq*RL;
 Park = [sin(delta) cos(delta); -cos(delta) sin(delta)];
 Rark = [cos(delta2) sin(delta2); sin(delta2) -cos(delta2)];
 Uark = [sin(delta); -cos(delta)];
 Pinv = [sin(delta) -cos(delta); cos(delta) sin(delta)];
 w = [0 omega; -omega 0];
 w3 = [0 omega 0; 0 0 omega; -omega 0 0];
-% w_wo = [0 omega-omega0; -(omega-omega0) 0];
  w_wo =[0 omega-omega0; -(omega-omega0) 0];
 
 I = [Id; Iq];

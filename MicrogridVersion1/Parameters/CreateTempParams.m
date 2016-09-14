@@ -164,6 +164,7 @@ Laq_G7 =  1.64;
 
 save('G7.mat','Lad_G7','Laf_G7','Laq_G7','Ldf_G7','LSd_G7','LSq_G7',...
     'LRD_G7','LF_G7','LRQ_G7','RS_G7','RR_G7','RF_G7','H_G7','B_G7');
+
 H_G8 = 0.3222;
 B_G8 = 0.0132;
 F_G8 = 0.01322;

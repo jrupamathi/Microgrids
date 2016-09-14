@@ -10,8 +10,8 @@ addpath('../Parameters')
             
 load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','RR_G23','RF_G23','H_G23','B_G23')
 %LRD_G23 = 6.87;    
-load('L2.mat', 'PL_L2', 'QL_L2');
-
+% load('L2.mat', 'PL_L2', 'QL_L2');
+PL_L2 = 1.0; QL_L2 = 0.62;
 load('TL_2_23.mat', 'LTL_TL_2_23', 'RTL_TL_2_23','CTL_TL_2_23');
 LTL_TL_2_23=0.1;
 x0 = 0.5*ones(13,1);

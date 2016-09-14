@@ -8,24 +8,18 @@ RTL = 1e-4;
 LTL = 0.1;
 VdrefArr = [1];%  0.95 1];
 RR = 0.4; LR = 0.1;
+% RR = 0.005; LR = 50;
 tArray = [0 1 0.2 0.3];
 Kgp = 0.2519;
 Kgq = 0.2632;
-x0= [1;0;1;0;1;0;0;0];
-t=[]; x=[];
-for j = 1:numel(VdrefArr)
-    Vd = VdrefArr(j);
-    factor = Vd/1.12;
-%Kp1 = 0.1/(0.85*factor); Ki1 = 1/(1.35*factor); Kp2 = 1/(0.5*factor); Ki2 = 1/(2*factor);
- Kp1 = 0.02; Ki1 = 0.08;
+% x0= [1;0;1;0;1;0;0;0];
+x0 = ones(8,1);
+Kp1 = 0.02; Ki1 = 0.08;
  Kp2 = 0.02; Ki2 = 0.08;
-%Kp1 = 0.002/(0.85*factor); Ki1 = 0.2/(1.35*factor); Kp2 = 0.002/(0.5*factor); Ki2 = 0.2/(2*factor);
-tspan = [tArray(j) tArray(j+1)];
-[tStep,xStep] = ode45(@(t,x)PVDynamics(t,x,Vd),tspan,x0);
-x0 = xStep(end,:);
-t = [t,tStep'];
-x = [x, xStep'];
-end
+% for j = 1:numel(VdrefArr)
+    Vd = 1;%VdrefArr(j);
+   tspan = [0 1];
+[t,x] = ode45(@(t,x)PVDynamics(t,x,Vd),tspan,x0);
 
 
 function [dx,alpha,Vcstar] = PVDynamics(t,x,vTLRd)
@@ -66,8 +60,27 @@ diRqdt = (vRLq - RR*iRq - vRRq)/LR - omega0*iRd;
             
             dx = 377*[dvTLLddt ; dvTLLqdt ; diTLMddt ; diTLMqdt;...
                 diRddt;diRqdt;delPdt;delQdt]; 
-            plot(t,x(7),'b*',t,x(8),'r*');hold on;
+%             plot(t,x(7),'b*',t,x(8),'r*');hold on;
 
 end
+I = sqrt(x(:,1).^2 + x(:,2).^2);
+V = sqrt(x(:,5).^2 + x(:,6).^2);
+figure(1)
+plot(t,I,'b',t,V,'r');
+xlabel('Time(in seconds)');
+ylabel('in p.u.');
+title('PV voltage and current magnitudes');
+legend('PV current', 'PV Terminal voltage');
+
+figure(2);
+P = x(:,5).*x(:,1) + x(:,6).*x(:,2);
+Q = x(:,6).*x(:,1) - x(:,5).*x(:,2);
+plot(t,P,t,Q)
+xlabel('Time(in seconds)')
+ylabel('in p.u.')
+title('PV real and reactive power output');
+legend('PV real power', 'PV reactive power');
+
+
 save('dataPV.mat')
 end

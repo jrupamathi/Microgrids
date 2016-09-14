@@ -13,7 +13,7 @@ dx(5) = dvTLLddt;
 dx(6) = dvTLLqdt;
 
 s1 = vACd^2 + vACq^2 - Vref^2;
-s2 = 1.5*(vACd*iRd + vACq*iRq) - Pref;
+s2 = (vACd*iRd + vACq*iRq) - Pref;
 
 dsdt = jacobian([s1;s2],x)* transpose(dx);
 %%

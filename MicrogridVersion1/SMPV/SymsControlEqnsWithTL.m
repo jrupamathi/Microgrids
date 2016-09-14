@@ -57,7 +57,7 @@ omega0 = 1;
 
 %Generator Initial Conditions
 
-syms delta omega iD iF iQ vf Tm vds vqs Id Iq
+syms delta omega iD iF iQ vf Tm vds vqs Id Iq real
 syms Kt a Tt r Tg omegaRef
 delta2 = 2*delta;
 
@@ -101,7 +101,7 @@ x=[delta;omega;I;i];u=[Tm;vf];
 xdot = [ deltadot; omegadot; Idot; idot ];
 %%
 %Transmission Line
-syms iTLMd_TL_2_23 iTLMq_TL_2_23 vTLRd_TL_2_23 vTLRq_TL_2_23 iSd_G23 iSq_G23 Id Iq
+syms iTLMd_TL_2_23 iTLMq_TL_2_23 vTLRd_TL_2_23 vTLRq_TL_2_23 iSd_G23 iSq_G23 Id Iq real
 %For finding equilibrium
 CTL = 0.01;
 RTL = 0.00099;
@@ -110,7 +110,7 @@ LTL_TL_2_23=LTL;
 CTL_TL_2_23=CTL;
 RTL_TL_2_23=RTL;
 vd = 1;vq=0; % From Load flow
-I=solve(1.5*[vd*Id+ vq*Iq ;vq*Id- vd*Iq] - [-3.5/4;-0.2/4]); % From Load flow
+I=solve(1.5*[vd*Id+ vq*Iq ;vq*Id- vd*Iq] - [-3.5/4;-0.01/4]); % From Load flow
 iTLMd_TL_2_23 = I.Id;
 iTLMq_TL_2_23 = I.Iq;
 % iSd_G23 = 1.1; iSq_G23 = 0.02; 

@@ -7,23 +7,17 @@ CTL = 0.01;
 RTL = 1e-5;
 LTL = 0.1;
 
-Lf = 0.01;
+Lf = 0.1;
 %Cf = 1e-2;
-Rf = 1;
+Rf = 0.4;
 VdrefArr = [1];% 0.7 1.1];
 tArray = [0 1 1.8 2.5];
 Kgp = 0.2519;
 Kgq = 0.2632;
 x0= ones(10,1);
-t=[]; x=[];
-for k = 1:numel(VdrefArr)
-    Vd = VdrefArr(k);
-    tspan = [tArray(k) tArray(k+1)];
-[tStep,xStep] = ode45(@(t,x)PVDynamics(t,x,Vd),tspan,x0);
-x0=xStep(end,:);
-t = [t tStep'];
-x =[x xStep'];
-end
+    Vd = 1;%VdrefArr(k);
+    tspan = [0 1];
+[t,x] = ode45(@(t,x)PVDynamics(t,x,Vd),tspan,x0);
 
 function dx = PVDynamics(t,x,vTLRd)
 vTLLd = x(1);
@@ -42,17 +36,14 @@ t
 vACd = vTLLd; vACq = vTLLq;
 
 dphidt = omega0;
-%RL = -Pref/(1.5*(vACd^2 + vACq^2)*(Pref^2 + Qref^2)); 
-%RL = (Pref-1.5*(iFd^2+iFq^2)*Rf)/(1.5*(Vref^2)*(Pref^2 + Qref^2)); 
-%LL = imag((vPVd + 1i*vPVq)/(iPVd + 1i*iPVq));%0.01;%-Qref/(1.5*(Vref^2)*(Pref^2 + Qref^2)); 
 dCfdt =  0.1*(sqrt(vPVd^2+vPVq^2) - Vref) + 0.01*CfIn;%(Qref + 1.5*(iFd^2+iFq^2)*Lf)/(1.5*(vPVd^2+ vPVq^2));
 CfIndt = (sqrt(vPVd^2+vPVq^2) - Vref);
 ConvMat = [vPVd vPVq;
             vPVq -vPVd];
 %ConvMat = [1 0; 0 -1];
-I = ConvMat\[Pref-1.5*(iFd^2+iFq^2)*Rf;Qref-1.5*(iFd^2+iFq^2)*Lf];
-iRefd = I(1)/1.5;
-iRefq = I(2)/1.5;
+I = ConvMat\[Pref;Qref];%[Pref-(iFd^2+iFq^2)*Rf;Qref-(iFd^2+iFq^2)*Lf];
+iRefd = I(1);
+iRefq = I(2);
 
 iPVd = iRefd;
 iPVq = iRefq;
@@ -79,5 +70,22 @@ iInLq = iFq;
                 dCfdt;CfIndt];
 
 end
+I = sqrt(x(:,7).^2 + x(:,8).^2);
+V = sqrt(x(:,5).^2 + x(:,6).^2);
+figure(1)
+plot(t,I,'b',t,V,'r');
+xlabel('Time(in seconds)');
+ylabel('in p.u.');
+title('PV voltage and current magnitudes');
+legend('PV current', 'PV Terminal voltage');
+
+figure(2);
+P = x(:,5).*x(:,7) + x(:,6).*x(:,8);
+Q = x(:,6).*x(:,7) - x(:,5).*x(:,8);
+plot(t,P,t,Q)
+xlabel('Time(in seconds)')
+ylabel('in p.u.')
+title('PV real and reactive power output');
+legend('PV real power', 'PV reactive power');
 save('dataPV.mat')
 end

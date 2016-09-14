@@ -19,8 +19,8 @@ B_IM2 = F_IM2;
 Lmr_IM2 = Lm_IM2;
 Lms_IM2 = Lm_IM2;
 
-LR_IM2 = Llr_IM2;% + 1.5*Lmr_IM2;
-LS_IM2 = Lls_IM2;% + 1.5*Lms_IM2;
+LR_IM2 = Llr_IM2 + Lmr_IM2;
+LS_IM2 = Lls_IM2 + Lms_IM2;
 LSS_IM2 = 3*Lms_IM2 / 2;
 LRR_IM2 = 3*Lmr_IM2 / 2;
 M_IM2 = Lm_IM2;
@@ -43,8 +43,8 @@ B_IM14 = F_IM2;
 Lmr_IM14 = Lm_IM14;
 Lms_IM14 = Lm_IM14;
 
-LR_IM14 = Llr_IM14;% + Lmr_IM14;
-LS_IM14 = Lls_IM14;% + Lms_IM14;
+LR_IM14 = Llr_IM14 + Lmr_IM14;
+LS_IM14 = Lls_IM14 + Lms_IM14;
 LSS_IM14 = 3*Lms_IM14 / 2;
 LRR_IM14 = 3*Lmr_IM14 / 2;
 M_IM14 = Lm_IM14;
@@ -54,13 +54,13 @@ RS_IM14 = Rs_IM14;
 save('IM2.mat','LR_IM2','LRR_IM2','LS_IM2','LSS_IM2','M_IM2','RR_IM2','RS_IM2','J_IM2','tauL_IM2','B_IM2');
 save('IM14.mat','LR_IM14','LRR_IM14','LS_IM14','LSS_IM14','M_IM14','RR_IM14','RS_IM14','J_IM14','tauL_IM14','B_IM14');
 
-PL_PV21= -0.18;
-QL_PV21=0.005;
+PL_PV21= -0.1875;
+QL_PV21=-0.01;
 save('PV21.mat', 'PL_PV21', 'QL_PV21');
 
-PL_B20= 0;
-QL_B20=0;
-save('B20.mat', 'PL_B20', 'QL_B20');
+% PL_B20= 0;
+% QL_B20=0;
+% save('B20.mat', 'PL_B20', 'QL_B20');
 
 PL_L2= 1.186/4;
 QL_L2=0.6148/4;

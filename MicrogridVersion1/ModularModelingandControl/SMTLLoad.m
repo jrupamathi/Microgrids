@@ -3,14 +3,14 @@ clear classes
 syms phi dphidt real
 
 % Generators
-G23 = SM7State({'_G23'},phi,dphidt);
+G23 = SM7StateControl({'_G23'},phi,dphidt);
 
 % Transmission Lines
 % Bus 2
 TL_2_23 = TransmissionLine({'_TL_2_23'},phi,dphidt);
 
 % Loads
-L2 = Load({'_L2'},phi,dphidt);
+L2 = PQLoad({'_L2'},phi,dphidt);
 %IM2 = InductionMachine({'_IM2'},phi,dphidt);
 
 % Modules

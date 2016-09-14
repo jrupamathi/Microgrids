@@ -71,8 +71,8 @@ K_Global = [  -0.875,    0.05;
                  -0.7149, -0.4075];
 GlobalCont = K_Global*[vTLRd_TL_2_23; vTLRq_TL_2_23];
 
-Tm_Global = 0;%GlobalCont(1,:);
-vR_Global = 0;%GlobalCont(2,:);
+Tm_Global = GlobalCont(1,:);
+vR_Global = GlobalCont(2,:);
 
 Tm_G23 = Tm_Local + Tm_Global;
 vR_G23 = vR_Local + vR_Global;

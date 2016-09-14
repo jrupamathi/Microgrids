@@ -1,7 +1,7 @@
 function SimulateSmGc
 load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','RR_G23','RF_G23','H_G23','B_G23')
 
-tspan = [0,0.02];
+tspan = [0,1];
 % x0 = ones(12,1);
 % x0(1:8) = [1 0 0 0 -0.4 0 1 0.1];
 % x0 = [0.9953    0.0188   -0.0000   -0.0000   -1.7067    1.3097    1.0000    1.3436         0    0.0000         0    0.0000];
@@ -83,7 +83,7 @@ domega_G23dt = -(B_G23*(omega_G23-1) - Pm_G23/omega_G23 + (iSd_G23*vTLRd_TL_2_23
 %diTLMq_TL_2_23dt = - 377*dphidt*iTLMd_TL_2_23 - (377*(vTLRq_TL_2_23 - vTLLq_TL_2_23 + RTL_TL_2_23*iTLMq_TL_2_23))/LTL_TL_2_23;
 
 %Governor control
-dPm_G23dt = x1;%-1*(omega_G23 - omegaref) - 0.1*x1;%x1;
+dm_G23dt = x1;%-1*(omega_G23 - omegaref) - 0.1*x1;%x1;
 dx1dt = (x2-x1)/T6;%omega_G23 - omegaref;
 dx2dt = (k*T4*x4 + k*x3 - x2)/T5;
 dx3dt = x4;

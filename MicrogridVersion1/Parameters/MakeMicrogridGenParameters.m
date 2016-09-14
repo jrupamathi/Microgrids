@@ -1,15 +1,23 @@
+Ll1 = 0.08;
+Lmd1 = 2.81;
+Lmq1 = 1.64;
+Llfd1 = 0.531;
+Llkd1 = 2.655;
+Llkq1 = 0.2408;
+
 H_G23 = 0.3222;
 B_G23 = 0.0132;
-F_G23 = 0.01322;
 RS_G23 = 0.01524;
 RR_G23 = 0.22;
+Rkd_G23 = 0.2343;
+Rkq_G23 = 0.03365;
 RF_G23 = 0.004319;
 
-LSd_G23 = 0.08+ 1.5*2.81;
-LRD_G23 = 2.655+ 1.5*2.81;         
-LF_G23 = 0.531+ 1.5*2.81 ;
-LSq_G23 = 0.2498+ 1.5*1.64;
-LRQ_G23 = 0.2408+  1.5*1.64;         
+LSd_G23 = Ll1+ Lmd1;
+LRD_G23 = Llkd1 + Lmd1;
+LF_G23 = Llfd1 + Lmd1;
+LSq_G23 = Ll1 + Lmq1;
+LRQ_G23 = Llkq1 + Lmq1;
 
 Lad_G23 =  2.81;
 Laf_G23 =  2.81;
@@ -35,28 +43,42 @@ iF_G23_ref = reqd(4);
 delta_G23_ref = reqd(6);
 omega_G23_ref = reqd(7);
 
-Tmeq_G23 = 1;
-vfeq_G23 = 0.000641;
+tauL_G23_ref = 1;
+vR_G23_ref = 0.000641;
 
-save('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','RR_G23','RF_G23','H_G23','B_G23',...
+% save('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','RR_G23','RF_G23','H_G23','B_G23',...
+%     'K11_G23','K12_G23','K13_G23','K14_G23','K15_G23','K16_G23','K17_G23',...
+%     'K21_G23','K22_G23','K23_G23','K24_G23','K25_G23','K26_G23','K27_G23',...
+%     'delta_G23_ref','omega_G23_ref','iSd_G23_ref','iSq_G23_ref','iRd_G23_ref','iRq_G23_ref','iF_G23_ref',...
+%     'Tmeq_G23','vfeq_G23');
+save('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','Rkd_G23','Rkq_G23','RF_G23','H_G23','B_G23',...
     'K11_G23','K12_G23','K13_G23','K14_G23','K15_G23','K16_G23','K17_G23',...
     'K21_G23','K22_G23','K23_G23','K24_G23','K25_G23','K26_G23','K27_G23',...
     'delta_G23_ref','omega_G23_ref','iSd_G23_ref','iSq_G23_ref','iRd_G23_ref','iRq_G23_ref','iF_G23_ref',...
-    'Tmeq_G23','vfeq_G23');
+    'tauL_G23_ref','vR_G23_ref');
+
 %%
+Ll2 = 0.05;
+Lmd2 = 2.35;
+Lmq2 = 1.72;
+Llfd2 = 0.511;
+Llkd2 = 3.7378;
+Llkq2 = 0.2392;
 
 H_G22 = 0.3468;
 B_G22 = 0.009238;
 F_G22 = 0.009238;
 RS_G22 = 0.008979;
 RR_G22 = 0.2825;
+Rkd_G22 = 0.2343;
+Rkq_G22 = 0.0337;
 RF_G22 = 0.00206;
 
-LSd_G22 = 0.05+ 1.5*2.35;
-LRD_G22 = 3.738+ 1.5*2.35;         
-LF_G22 = 0.511+ 1.5*2.35 ;
-LSq_G22 = 0.05+ 1.5*1.72;
-LRQ_G22 = 0.2392+  1.5*1.72;         
+LSd_G22 = Ll2+ Lmd2;
+LRD_G22 = Llkd2 + Lmd2;
+LF_G22 = Llfd2 + Lmd2;
+LSq_G22 = Ll2 + Lmq2;
+LRQ_G22 = Llkq2 + Lmq2;
 
 Lad_G22 =  2.35;
 Laf_G22 =  2.35;
@@ -81,11 +103,16 @@ iF_G22_ref = reqd(4);
 delta_G22_ref = reqd(6);
 omega_G22_ref = reqd(7);
 
-Tmeq_G22 = 1;
-vfeq_G22 = 0.003729;
+tauL_G22_ref = 1;
+vR_G22_ref = 0.003729;
 
-save('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','RR_G22','RF_G22','H_G22','B_G22',...
+% save('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','RR_G22','RF_G22','H_G22','B_G22',...
+%     'K11_G22','K12_G22','K13_G22','K14_G22','K15_G22','K16_G22','K17_G22',...
+%     'K21_G22','K22_G22','K23_G22','K24_G22','K25_G22','K26_G22','K27_G22',...
+%     'delta_G22_ref','omega_G22_ref','iSd_G22_ref','iSq_G22_ref','iRd_G22_ref','iRq_G22_ref','iF_G22_ref',...
+%     'Tmeq_G22','vfeq_G22');
+save('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','Rkd_G22','Rkq_G22','RF_G22','H_G22','B_G22',...
     'K11_G22','K12_G22','K13_G22','K14_G22','K15_G22','K16_G22','K17_G22',...
     'K21_G22','K22_G22','K23_G22','K24_G22','K25_G22','K26_G22','K27_G22',...
     'delta_G22_ref','omega_G22_ref','iSd_G22_ref','iSq_G22_ref','iRd_G22_ref','iRq_G22_ref','iF_G22_ref',...
-    'Tmeq_G22','vfeq_G22');
+    'tauL_G22_ref','vR_G22_ref');

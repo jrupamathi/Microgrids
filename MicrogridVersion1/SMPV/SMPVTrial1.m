@@ -33,7 +33,7 @@ tArray = [4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 5];
 t = [];
 x = [];
 %for i = 1:numel(tauL_IM2Array)
-    tspan = [tArray(1),5];
+    tspan = [tArray(1),4.3];
     [t,x] = ode45(@LLMicrogridDynamics,tspan,x0);%Options);
 
     toc
