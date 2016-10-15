@@ -1,0 +1,101 @@
+% Wire inductance values
+L_AWG1_0 = 259e-9;
+L_AWG4_0 = 239e-9;
+L_KCMIL_500 = 213e-9;
+
+% Capacitance
+C = 1e-6;
+Csh = 0.01;
+% Base values for transmission line
+Base_MVA = 4;
+Base_KV = 13.8;
+B23_KV = 0.46;
+B5_KV = 4.16;
+
+% Transmission Lines (copied from perUnitCalcs.xlsx)
+RTL_TL_1_23 = 4.55308E-05;	
+LTL_TL_1_23 = 0.100043667;
+CTL_TL_1_23 = Csh;%*RTL_TL_1_2/RTL_TL_1_4;
+
+RTL_TL_1_22 = 1.51352E-05;
+LTL_TL_1_22 = 2.91115E-05;
+CTL_TL_1_22 = Csh*RTL_TL_1_22/RTL_TL_1_23;
+
+
+RTL_TL_1_3 = 2.27063E-05;
+LTL_TL_1_3 = 7.6979E-05;
+CTL_TL_1_3 = Csh*RTL_TL_1_3/RTL_TL_1_23;
+
+RTL_TL_3_5 = 3.48411E-05;
+LTL_TL_3_5 = 0.100100319;
+CTL_TL_3_5 = Csh*RTL_TL_3_5/RTL_TL_1_23;
+
+RTL_TL_3_11 = 0.002033708;
+LTL_TL_3_11 = 0.101950468;
+CTL_TL_3_11 = Csh*RTL_TL_3_11/RTL_TL_1_23;
+
+RTL_TL_22_6 = 3.02705E-05;
+LTL_TL_22_6 = 5.82229E-05;
+CTL_TL_22_6 = Csh*RTL_TL_22_6/RTL_TL_1_23;
+
+RTL_TL_22_12 = 0.000552557;
+LTL_TL_22_12 = 0.101872491;
+CTL_TL_22_12 = Csh*RTL_TL_22_12/RTL_TL_1_23;
+
+RTL_TL_6_13 = 0.000554179;
+LTL_TL_6_13 = 0.10187561;
+CTL_TL_6_13 = Csh*RTL_TL_6_13/RTL_TL_1_23;
+
+RTL_TL_6_14 = 0.00141525;
+LTL_TL_6_14 = 0.104720632;
+CTL_TL_6_14 = Csh*RTL_TL_6_14/RTL_TL_1_23;
+
+RTL_TL_22_15 = 3.07903E-06;
+LTL_TL_22_15 = 0.100010439;
+CTL_TL_22_15 = Csh*RTL_TL_22_15/RTL_TL_1_23;
+
+RTL_TL_5_16 = 0.000288143;
+LTL_TL_5_16 = 0.100959066;
+CTL_TL_5_16 = Csh*RTL_TL_5_16/RTL_TL_1_23;
+
+RTL_TL_5_17 = 0.001362065;
+LTL_TL_5_17 = 0.104599883;
+CTL_TL_5_17 = Csh*RTL_TL_5_17/RTL_TL_1_23;
+
+RTL_TL_5_21 = 0;	
+LTL_TL_5_21 = 0.1;
+CTL_TL_5_21 = Csh*LTL_TL_5_21/LTL_TL_1_23;
+
+RTL_TL_5_18 = 0.001362065;	
+LTL_TL_5_18 = 0.104599883;
+CTL_TL_5_18 = Csh*RTL_TL_5_18/RTL_TL_1_23;
+
+RTL_TL_5_19 = 0.00134993;	
+LTL_TL_5_19 = 0.104576543;
+CTL_TL_5_19 = Csh*RTL_TL_5_19/RTL_TL_1_23;
+
+RTL_TL_5_20 = 5.71895E-05;	
+LTL_TL_5_20 = 0.10011;
+CTL_TL_5_20 = Csh*RTL_TL_5_20/RTL_TL_1_23;
+
+save('TL_1_23.mat', 'LTL_TL_1_23', 'RTL_TL_1_23','CTL_TL_1_23');
+save('TL_1_3.mat', 'LTL_TL_1_3', 'RTL_TL_1_3','CTL_TL_1_3');
+save('TL_1_22.mat', 'LTL_TL_1_22', 'RTL_TL_1_22','CTL_TL_1_22');
+
+save('TL_3_5.mat', 'LTL_TL_3_5', 'RTL_TL_3_5','CTL_TL_3_5');
+save('TL_3_11.mat', 'LTL_TL_3_11', 'RTL_TL_3_11','CTL_TL_3_11');
+
+save('TL_22_6.mat', 'LTL_TL_22_6', 'RTL_TL_22_6','CTL_TL_22_6');
+save('TL_22_12.mat', 'LTL_TL_22_12', 'RTL_TL_22_12','CTL_TL_22_12');
+save('TL_22_15.mat', 'LTL_TL_22_15', 'RTL_TL_22_15','CTL_TL_22_15');
+
+save('TL_6_13.mat', 'LTL_TL_6_13', 'RTL_TL_6_13','CTL_TL_6_13');
+save('TL_6_14.mat', 'LTL_TL_6_14', 'RTL_TL_6_14','CTL_TL_6_14');
+
+save('TL_5_16.mat', 'LTL_TL_5_16', 'RTL_TL_5_16','CTL_TL_5_16');
+save('TL_5_17.mat', 'LTL_TL_5_17', 'RTL_TL_5_17','CTL_TL_5_17');
+save('TL_5_21.mat', 'LTL_TL_5_21', 'RTL_TL_5_21','CTL_TL_5_21');
+save('TL_5_18.mat', 'LTL_TL_5_18', 'RTL_TL_5_18','CTL_TL_5_18');
+save('TL_5_19.mat', 'LTL_TL_5_19', 'RTL_TL_5_19','CTL_TL_5_19');
+save('TL_5_20.mat', 'LTL_TL_5_20', 'RTL_TL_5_20','CTL_TL_5_20');
+
