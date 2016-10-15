@@ -1,8 +1,0 @@
-iSd_IM2 = x(1);
-iSq_IM2 = x(2);
-iRd_IM2 = x(3);
-iRq_IM2 = x(4);
-omega_IM2 = x(5);
-theta_IM2 = x(6);
-iLd_L2 = x(7);
-iLq_L2 = x(8);
