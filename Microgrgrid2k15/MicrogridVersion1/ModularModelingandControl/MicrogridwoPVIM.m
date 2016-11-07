@@ -22,16 +22,16 @@ TL_5_18 = TransmissionLine({'_TL_5_18'},phi,dphidt);
 TL_5_19 = TransmissionLine({'_TL_5_19'},phi,dphidt);
 
 % PQLoads
-L2 = PQLoad({'_L2'},phi,dphidt);
-L16 = PQLoad({'_L16'},phi,dphidt);
-L17 = PQLoad({'_L17'},phi,dphidt);
-L18 = PQLoad({'_L18'},phi,dphidt);
-L19 = PQLoad({'_L19'},phi,dphidt);
-L14 = PQLoad({'_L14'},phi,dphidt);
-L15 = PQLoad({'_L15'},phi,dphidt);
-L13 = PQLoad({'_L13'},phi,dphidt);
-L12 = PQLoad({'_L12'},phi,dphidt);
-L11 = PQLoad({'_L11'},phi,dphidt);
+L2 = Load({'_L2'},phi,dphidt);
+L16 = Load({'_L16'},phi,dphidt);
+L17 = Load({'_L17'},phi,dphidt);
+L18 = Load({'_L18'},phi,dphidt);
+L19 = Load({'_L19'},phi,dphidt);
+L14 = Load({'_L14'},phi,dphidt);
+L15 = Load({'_L15'},phi,dphidt);
+L13 = Load({'_L13'},phi,dphidt);
+L12 = Load({'_L12'},phi,dphidt);
+L11 = Load({'_L11'},phi,dphidt);
 
 % Modules
 Modules = {G23,G22,...

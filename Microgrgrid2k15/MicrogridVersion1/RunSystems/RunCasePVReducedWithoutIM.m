@@ -50,6 +50,8 @@ x0 = 0.5*randn(86,1);
 
 tic  
 tArray = [4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 5];
+RR_G22 = 0.2825;
+RR_G23 = 0.2825;
 
 
 %Options =  odeset('RelTol',1e-4,'AbsTol',1e-3');

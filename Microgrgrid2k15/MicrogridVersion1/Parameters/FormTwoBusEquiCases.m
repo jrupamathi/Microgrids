@@ -29,7 +29,7 @@ Vol = [1	1.014	0.995	1.008
 1	1.011	0.996	1.006
 1.001	1.02	1	1.02
 ];
-caseNum = 4;
+caseNum = 2;
 switch caseNum
     case 1 
         V = Vol(:,1);
@@ -43,31 +43,6 @@ end
        
 mpc = caseMicroUpdated;
 
-filename = '';
-% filename = 'Case1_islandedshunt14_adjustedloads.csv';
-
-if(~isempty(filename))
-file2 = load(filename,'variable');
-%There has to be load shedding
-Load_change = file2(:,1);
-newRealP = file2(:,4)*mpc.baseMVA;
-newReacQ = file2(:,6)*mpc.baseMVA;
-
-newP = newRealP; newQ = newReacQ;
-for i=1:length(Load_change)
-    indx = find(mpc.bus(:,1) == Load_change(i));
-    mpc.bus(indx,3) = newP(i); mpc.bus(indx,4) = newQ(i);
-end
-end
-
-%For shunt capacitance
-shuntCapNodes = [];
-Csh = [0.1042];
-% Csh = [0.1385];
-for i = 1:length(shuntCapNodes)
-    indx = find(mpc.bus(:,1) == shuntCapNodes(i));
-    mpc.bus(indx,4) = mpc.bus(indx,4) - V(shuntCapNodes(i))^2*Csh(i);
-end
 %%
 
 %Extracting powers and initialization
@@ -78,6 +53,26 @@ ybus = GeneralYbus(mpc);
 P = mpc.bus(:,3)/mpc.baseMVA; Q = mpc.bus(:,4)/mpc.baseMVA;
 S = (P + 1i* Q);
 
+switch caseNum
+    case 1
+        S(21) = -(3.5 + 1i*0.01)/mpc.baseMVA;
+        S(22) = -(4 - 1i*0.41)/mpc.baseMVA;
+        S(23) = -(1 - 1i*1)/mpc.baseMVA;
+    case 2
+        S(1) = -(1.13 + 1i*1.47)/mpc.baseMVA;
+        S(21) = -(3.5 + 1i*0.01)/mpc.baseMVA;
+        S(22) = -(1.26 + 1i*2.11)/mpc.baseMVA;
+        S(23) = -(0.43 + 1i*0.02)/mpc.baseMVA;
+    case 3
+        S(21) = -(1.34 + 1i*0.32)/mpc.baseMVA;
+        S(22) = -(4 + 1i*4)/mpc.baseMVA;
+        S(23) = -(1 - 1i*0.87)/mpc.baseMVA;
+    case 4
+        S(21) = -(4 + 1i*0.17)/mpc.baseMVA;
+        S(22) = -(1.77 + 1i*3.49)/mpc.baseMVA;
+        S(23) = -(0.57 + 1i*0.03)/mpc.baseMVA;
+end
+       
 len = size(mpc.bus,1);
 
 %%
@@ -90,6 +85,7 @@ for i = 1:length(S)
     end
 end
 
+
 %%
 %Adding load impedances
 for i =1:len
@@ -97,7 +93,7 @@ for i =1:len
 end
 
 %Kron's reduction
-Nodes_stay = [1 21 22 23]; 
+Nodes_stay = [21 22]; 
 Nodes =  setdiff(1:23,Nodes_stay);
 
 Yred=Kron(ybus,Nodes);
@@ -133,10 +129,10 @@ Zsh = 1./Yshunt;
 Rsh = real(Zsh); Lsh = imag(Zsh);
 %%
 % %Loads
-SL1 = V(1)^2/conj(Zsh(1));
-SL21 = V(21)^2/conj(Zsh(2));
-SL22 = V(22)^2/conj(Zsh(3));
-SL23 = V(23)^2/conj(Zsh(4));
+% SL1 = V(1)^2/conj(Zsh(1));
+% SL21 = V(21)^2/conj(Zsh(2));
+% SL22 = V(22)^2/conj(Zsh(3));
+% SL23 = V(23)^2/conj(Zsh(4));
 
 %Line MAx transfer
 % S1_21 = V(1)*V(21)/abs(Imp(1,2))
@@ -144,38 +140,38 @@ SL23 = V(23)^2/conj(Zsh(4));
 % S1_23 = V(1)*V(23)/abs(Imp(1,4))
 %%s
 %For the case of voltage with shunts
-RL_PV21 = P(21)*V(21)^2/(P(21)^2+Q(21)^2);
-LL_PV21 =(Q(21))*V(21)^2/(P(21)^2+Q(21)^2);
-save('PV21.mat', 'RL_PV21', 'LL_PV21');
-
-RTL_TL_1_21 = R(1,2);
-LTL_TL_1_21 = L(1,2);
-CTL_TL_1_21 = 0.01;
-
-RTL_TL_1_22 = R(1,3);
-LTL_TL_1_22 = L(1,3);
-CTL_TL_1_22 = 0.01;
-
-RTL_TL_1_23 = R(1,4);
-LTL_TL_1_23 = L(1,4);
-CTL_TL_1_23 = 0.01;
-
-save('TL_1_21.mat', 'LTL_TL_1_21', 'RTL_TL_1_21','CTL_TL_1_21');
-save('TL_1_22.mat', 'LTL_TL_1_22', 'RTL_TL_1_22','CTL_TL_1_22');
-save('TL_1_23.mat', 'LTL_TL_1_23', 'RTL_TL_1_23','CTL_TL_1_23');
-
-RL_L21 = real(Zsh(2));
-LL_L21 = imag(Zsh(2));
-save('L21.mat', 'RL_L21', 'LL_L21');
-
-RL_L22 = real(Zsh(3));
-LL_L22 = imag(Zsh(3));
-save('L22.mat', 'RL_L22', 'LL_L22');
-
-RL_L23 = real(Zsh(4));
-LL_L23 = imag(Zsh(4));
-save('L23.mat', 'RL_L23', 'LL_L23');
-
-RL_L1 = real(Zsh(1));
-LL_L1 = imag(Zsh(1));
-save('L1.mat', 'RL_L1', 'LL_L1');
+% RL_PV21 = P(21)*V(21)^2/(P(21)^2+Q(21)^2);
+% LL_PV21 =(Q(21))*V(21)^2/(P(21)^2+Q(21)^2);
+% save('PV21.mat', 'RL_PV21', 'LL_PV21');
+% 
+% RTL_TL_1_21 = R(1,2);
+% LTL_TL_1_21 = L(1,2);
+% CTL_TL_1_21 = 0.01;
+% 
+% RTL_TL_1_22 = R(1,3);
+% LTL_TL_1_22 = L(1,3);
+% CTL_TL_1_22 = 0.01;
+% 
+% RTL_TL_1_23 = R(1,4);
+% LTL_TL_1_23 = L(1,4);
+% CTL_TL_1_23 = 0.01;
+% 
+% save('TL_1_21.mat', 'LTL_TL_1_21', 'RTL_TL_1_21','CTL_TL_1_21');
+% save('TL_1_22.mat', 'LTL_TL_1_22', 'RTL_TL_1_22','CTL_TL_1_22');
+% save('TL_1_23.mat', 'LTL_TL_1_23', 'RTL_TL_1_23','CTL_TL_1_23');
+% 
+% RL_L21 = real(Zsh(2));
+% LL_L21 = imag(Zsh(2));
+% save('L21.mat', 'RL_L21', 'LL_L21');
+% 
+% RL_L22 = real(Zsh(3));
+% LL_L22 = imag(Zsh(3));
+% save('L22.mat', 'RL_L22', 'LL_L22');
+% 
+% RL_L23 = real(Zsh(4));
+% LL_L23 = imag(Zsh(4));
+% save('L23.mat', 'RL_L23', 'LL_L23');
+% 
+% RL_L1 = real(Zsh(1));
+% LL_L1 = imag(Zsh(1));
+% save('L1.mat', 'RL_L1', 'LL_L1');

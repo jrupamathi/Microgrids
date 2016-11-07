@@ -1,156 +1,80 @@
-% generator parameters
-function Fin = symsIsolatedRLLoad
-set(0,'defaultlinelinewidth',1.5)
-addpath('../Parameters')
+%%
+function dx = SteadyStateWithOPFEqui(x,u220,u230,K22,K23,V21Mag,status,Iconn,x220,x230,Vinf)
 
-load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','Rkd_G23','RF_G23','H_G23','B_G23','Rkq_G23',...
-    'K1_G23','K2_G23','K3_G23','delta_G23_ref','omega_G23_ref','iF_G23_ref',...
-    'tauL_G23_ref','vR_G23_ref');
-load('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','Rkd_G22','RF_G22','H_G22','B_G22','Rkq_G22',...
-    'K1_G22','K2_G22','K3_G22','delta_G22_ref','omega_G22_ref','iF_G22_ref',...
-    'tauL_G22_ref','vR_G22_ref');
-
+Tm230 = u230(1); vf230 = u230(2);
+Tm220 = u220(1); vf220 = u220(2);
+%%
+%Loads steady state
 load('L1.mat', 'RL_L1', 'LL_L1');
 load('L21.mat', 'RL_L21', 'LL_L21');
 load('L22.mat', 'RL_L22', 'LL_L22');
 load('L23.mat', 'RL_L23', 'LL_L23');
 load('PV21.mat', 'RL_PV21', 'LL_PV21');
-% PPV =-0.1875; QPV = -0.01; 
-% RL_PV21 = -4; 
-% LL_PV21 = -2;
-% clear LL_PV21
-% syms LL_PV21 real% RL_PV21
-% Rnew = RL_PV21; Lnew = -2;
-% Rold = Rnew; Lold = Lnew;%-0.2808;
+
+%PV injection
+PPV = -0.875; 
+QPV = -0.01; 
+% if strcmp(PVbus,'slack')
+%     PPV = -1; QPV = -0.35/4;
+% end
+% QPV = -0.35;
+% QPV = -0.35;%min QPV for inter 
+Z21 = (V21Mag^2)/(PPV - 1i*QPV);
+RL_PV21 = real(Z21); LL_PV21 = imag(Z21);
+if strcmp(status, 'inter')
+    stat = 1;
+    iLd_Lsc = real(Iconn); iLq_Lsc = imag(Iconn);
+else
+    stat = 0;
+    iLd_Lsc = 0; iLq_Lsc = 0;
+end
+
+% generator parameters
+load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','Rkd_G23','Rkq_G23','RF_G23','H_G23','B_G23',...
+    'K1_G23','K2_G23','K3_G23');
+load('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','Rkd_G22','Rkq_G22','RF_G22','H_G22','B_G22',...
+    'K1_G22','K2_G22','K3_G22');
+% K22 = 100*K22; K23 = 10000*K23;
+K11_G22 = K22(1);K12_G22 = K22(2);K26_G22 = K22(3);
+K11_G23 = K23(1);K12_G23 = K23(2);K26_G23 = K23(3);
 load('TL_1_21.mat', 'LTL_TL_1_21', 'RTL_TL_1_21','CTL_TL_1_21');
 load('TL_1_22.mat', 'LTL_TL_1_22', 'RTL_TL_1_22','CTL_TL_1_22');
 load('TL_1_23.mat', 'LTL_TL_1_23', 'RTL_TL_1_23','CTL_TL_1_23');
-%1,2-25,27
-%3,4 - 24,26,28
-%5,6-26
-%7,8 - 25
-% clear CTL_TL_1_21 CTL_TL_1_22 CTL_TL_1_23
-% syms CTL_TL_1_21 CTL_TL_1_22 CTL_TL_1_23 Csh
-% CTL_TL_1_21=Csh; CTL_TL_1_22=Csh; CTL_TL_1_23=Csh;
-
-% clear K26_G22 K26_G23 real
-% syms K26_G22 K26_G23 k real
-% 
-% K26_G22 = k; K26_G23 = k;
-% syms tauL_G23 vR_G23 tauL_G22 vR_G22 real
 
 dphidt = 1;
-K1_G22 = 2.16; K2_G22 = 30.73;
-K3_G22 = -5.2418;
-K1_G23 = 7.1102; K2_G23 = 56.2904;
-K3_G23 = -4.6571;
 
-
-x0 = [0.3889
-    1.7223
-   -0.0002
-    0.0009
-   -1.9295
-  -16.2132
-    1.0000
-    0.3125
-   -0.5608
-   -0.0001
-   -0.0010
-   -0.9642
-    0.8682
-    1.0000
-    0.1216
-    0.2379
-    0.1071
-    0.2270
-    0.4345
-    0.6582
-    0.1663
-    0.1668
-    0.0638
-    0.9675
-    0.0033
-    0.0960
-    0.1068
-    0.9630
-    0.0411
-   -1.0642
-    0.0122
-    0.9763
-   -0.1512
-    0.7292
-    0.3263
-    1.0037
-   -0.0990
-   -0.1315
-    ];
-% idref = -0.1888;
-% iqref = -0.0683;
-
-% syms iSd_G22 iSq_G22 iRd_G22 iRq_G22 iF_G22 delta_G22 omega_G22 ...
-% iSd_G23 iSq_G23 iRd_G23 iRq_G23 iF_G23 delta_G23 omega_G23 ...
-% iLd_L1 iLq_L1 iLd_L21 iLq_L21 iLd_L22  iLq_L22  iLd_L23 iLq_L23...
-% vTLLd_TL_1_21 vTLLq_TL_1_21 iTLMd_TL_1_21 iTLMq_TL_1_21 vTLRd_TL_1_21 vTLRq_TL_1_21 ...
-% iTLMd_TL_1_22 iTLMq_TL_1_22 vTLRd_TL_1_22  vTLRq_TL_1_22 iTLMd_TL_1_23 iTLMq_TL_1_23 ...
-% vTLRd_TL_1_23 vTLRq_TL_1_23 iLd_PV21 iLq_PV21 iLdInt iLqInt real 
-options = optimoptions(@fsolve,'Display','iter','SpecifyObjectiveGradient',false);
-Fin = fsolve(@IsolatedRLLoad,x0,options);
-
-% x = [iSd_G22; iSq_G22; iRd_G22; iRq_G22 ;iF_G22 ;delta_G22 ;omega_G22 ;
-% iSd_G23 ;iSq_G23 ;iRd_G23 ;iRq_G23 ;iF_G23 ;delta_G23 ;omega_G23;
-% iLd_L1; iLq_L1 ;iLd_L21 ;iLq_L21 ;iLd_L22  ;iLq_L22  ;iLd_L23 ;iLq_L23;
-% vTLLd_TL_1_21; vTLLq_TL_1_21 ;iTLMd_TL_1_21 ;iTLMq_TL_1_21 ;vTLRd_TL_1_21 ;vTLRq_TL_1_21 ;
-% iTLMd_TL_1_22; iTLMq_TL_1_22; vTLRd_TL_1_22;  vTLRq_TL_1_22 ;iTLMd_TL_1_23 ;iTLMq_TL_1_23 ;
-% vTLRd_TL_1_23 ;vTLRq_TL_1_23;iLd_PV21 ;iLq_PV21 ];% tauL_G23; vR_G23; tauL_G22; vR_G22];
-% u = [tauL_G23; vR_G23; tauL_G22; vR_G22];
-% uref = [tauL_G23_ref; vR_G23_ref; tauL_G22_ref; vR_G22_ref];
-function dx = IsolatedRLLoad(x)
-iSd_G22 = x(1);
+iSd_G22 = x(1); 
 iSq_G22 = x(2);
-iRd_G22 = x(3);
-iRq_G22 = x(4);
+iRd_G22=x(3);
+iRq_G22=x(4);
 iF_G22 = x(5);
-delta_G22 = x(6);
-omega_G22 = x(7);
-iSd_G23 = x(8);
+delta_G22 =x(6);
+omega_G22 =x(7);
+iSd_G23 = x(8); 
 iSq_G23 = x(9);
-iRd_G23 = x(10);
-iRq_G23 = x(11);
+iRd_G23=x(10);
+iRq_G23=x(11);
 iF_G23 = x(12);
-delta_G23 = x(13);
-omega_G23 = x(14);
-iLd_L1 = x(15);
-iLq_L1 = x(16);
-iLd_L21 = x(17);
-iLq_L21 = x(18);
-iLd_L22 = x(19);
-iLq_L22 = x(20);
-iLd_L23 = x(21);
-iLq_L23 = x(22);
-vTLLd_TL_1_21 = x(23);
-vTLLq_TL_1_21 = x(24);
-iTLMd_TL_1_21 = x(25);
-iTLMq_TL_1_21 = x(26);
-vTLRd_TL_1_21 = x(27);
-vTLRq_TL_1_21 = x(28);
-iTLMd_TL_1_22 = x(29);
-iTLMq_TL_1_22 = x(30);
-vTLRd_TL_1_22 = x(31);
-vTLRq_TL_1_22 = x(32);
-iTLMd_TL_1_23 = x(33);
-iTLMq_TL_1_23 = x(34);
-vTLRd_TL_1_23 = x(35);
-vTLRq_TL_1_23 = x(36);
-iLd_PV21 = x(37);
-iLq_PV21 = x(38);
+delta_G23 =x(13);
+omega_G23 =x(14);
+iLd_L1=x(15); iLq_L1=x(16); iLd_L21=x(17) ;iLq_L21 =x(18);iLd_L22=x(19);  iLq_L22 =x(20) ;
+iLd_L23 =x(21);iLq_L23=x(22);
+vTLLd_TL_1_21=x(23); vTLLq_TL_1_21=x(24) ;iTLMd_TL_1_21=x(25) ;iTLMq_TL_1_21=x(26) ;
+vTLRd_TL_1_21 =x(27);vTLRq_TL_1_21=x(28) ;
+iTLMd_TL_1_22 = x(29); iTLMq_TL_1_22 = x(30); vTLRd_TL_1_22=x(31);  vTLRq_TL_1_22=x(32) ;
+iTLMd_TL_1_23 =x(33);iTLMq_TL_1_23=x(34) ;
+vTLRd_TL_1_23=x(35) ;vTLRq_TL_1_23=x(36);iLd_PV21 =x(37);iLq_PV21 = x(38);%...
+% deltaInt_G22; omegaInt_G22; iFInt_G22; deltaInt_G23; omegaInt_G23; iFInt_G23; 
+% ];% tauL_G23; vR_G23; tauL_G22; vR_G22];
+if strcmp(status,'inter')
+    iLd_Lsc=x(39);iLq_Lsc=x(40);
+end
+tauL_G22 = Tm220 - K11_G22*(delta_G22 - x220(end-1)) - K12_G22*(omega_G22 - x220(end));% - deltaInt_G22 - omegaInt_G22;
+vR_G22 = vf220 - K26_G22*(iF_G22 - x220(end-2));% - iFInt_G22;% - K25_G22*(iRd_G22 - iRd_G22_ref) - K27_G22*(iRq_G22 - iRq_G22_ref) - K23_G22*(iSd_G22 - iSd_G22_ref) - K24_G22*(iSq_G22 - iSq_G22_ref) - K22_G22*(omega_G22 - omega_G22_ref);
 
-tauL_G22 = tauL_G22_ref - K1_G22*(delta_G22 - delta_G22_ref) - K2_G22*(omega_G22 - omega_G22_ref);
-vR_G22 = vR_G22_ref - K3_G22*(iF_G22 - 3.85*iF_G22_ref);% - K25_G22*(iRd_G22 - iRd_G22_ref) - K27_G22*(iRq_G22 - iRq_G22_ref) - K23_G22*(iSd_G22 - iSd_G22_ref) - K24_G22*(iSq_G22 - iSq_G22_ref) - K22_G22*(omega_G22 - omega_G22_ref);
-% vR_G22 = vR_G22_ref - K26_G22*(sqrt(vTLRd_TL_1_22^2+vTLRq_TL_1_22^2) - 0.95*1.2);% - K25_G22*(iRd_G22 - iRd_G22_ref) - K27_G22*(iRq_G22 - iRq_G22_ref) - K23_G22*(iSd_G22 - iSd_G22_ref) - K24_G22*(iSq_G22 - iSq_G22_ref) - K22_G22*(omega_G22 - omega_G22_ref);
-tauL_G23 = tauL_G23_ref - K1_G23*(delta_G23 - delta_G23_ref) - K2_G23*(omega_G23 - omega_G23_ref);
-vR_G23 = vR_G23_ref - K3_G23*(iF_G23 - 0.65*iF_G23_ref);% - K25_G23*(iRd_G23 - iRd_G23_ref) - K27_G23*(iRq_G23 - iRq_G23_ref) - K23_G23*(iSd_G23 - iSd_G23_ref) - K24_G23*(iSq_G23 - iSq_G23_ref) - K22_G23*(omega_G23 - omega_G23_ref);
-% vR_G23 = vR_G23_ref - K26_G23*(sqrt(vTLRd_TL_1_23^2+vTLRq_TL_1_23^2) - 0.95*1.1);% - K25_G22*(iRd_G22 - iRd_G22_ref) - K27_G22*(iRq_G22 - iRq_G22_ref) - K23_G22*(iSd_G22 - iSd_G22_ref) - K24_G22*(iSq_G22 - iSq_G22_ref) - K22_G22*(omega_G22 - omega_G22_ref);
+tauL_G23 = Tm230 - K11_G23*(delta_G23 - x230(end-1)) - K12_G23*(omega_G23 - x230(end));%- deltaInt_G23 - omegaInt_G23;
+vR_G23 = vf230 - K26_G23*(iF_G23 - x230(end-2));%- iFInt_G23;% - K25_G23*(iRd_G23 - iRd_G23_ref) - K27_G23*(iRq_G23 - iRq_G23_ref) - K23_G23*(iSd_G23 - iSd_G23_ref) - K24_G23*(iSq_G23 - iSq_G23_ref) - K22_G23*(omega_G23 - omega_G23_ref);
+
 diSd_G22dt = 377*vTLRd_TL_1_22*(cos(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) - (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - 377*iRq_G22*((Laq_G22*Rkq_G22*cos(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22) - (Laq_G22*omega_G22*sin(delta_G22)*(Ldf_G22^2 - LF_G22*LRD_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22)) + 377*iSd_G22*(RS_G22*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) - (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + omega_G22*sin(2*delta_G22)*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + RS_G22*cos(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22))) - 377*iF_G22*((RF_G22*sin(delta_G22)*(LRD_G22*Laf_G22 - Lad_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (LRQ_G22*Laf_G22*omega_G22*cos(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22)) - 377*iRd_G22*((Rkd_G22*sin(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (LRQ_G22*Lad_G22*omega_G22*cos(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22)) - 377*iSq_G22*(omega_G22 + omega_G22*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) - (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + omega_G22*cos(2*delta_G22)*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - RS_G22*sin(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - 1) + 377*vTLRq_TL_1_22*sin(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - (377*vR_G22*sin(delta_G22)*(LRD_G22*Laf_G22 - Lad_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22);
 diSq_G22dt = 377*iF_G22*((RF_G22*cos(delta_G22)*(LRD_G22*Laf_G22 - Lad_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) + (LRQ_G22*Laf_G22*omega_G22*sin(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22)) - 377*iRq_G22*((Laq_G22*Rkq_G22*sin(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22) + (Laq_G22*omega_G22*cos(delta_G22)*(Ldf_G22^2 - LF_G22*LRD_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22)) - 377*iSq_G22*(omega_G22*sin(2*delta_G22)*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - RS_G22*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) - (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + RS_G22*cos(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22))) - 377*vTLRq_TL_1_22*(cos(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + 377*iRd_G22*((Rkd_G22*cos(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) + (LRQ_G22*Lad_G22*omega_G22*sin(delta_G22))/(Laq_G22^2 - LRQ_G22*LSq_G22)) + 377*iSd_G22*(omega_G22 + omega_G22*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) - (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - omega_G22*cos(2*delta_G22)*((LRQ_G22*LSd_G22)/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (LSq_G22*(Ldf_G22^2 - LF_G22*LRD_G22))/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + RS_G22*sin(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) - 1) + 377*vTLRd_TL_1_22*sin(2*delta_G22)*(LRQ_G22/(2*Laq_G22^2 - 2*LRQ_G22*LSq_G22) + (Ldf_G22^2 - LF_G22*LRD_G22)/(2*LF_G22*Lad_G22^2 + 2*LRD_G22*Laf_G22^2 + 2*LSd_G22*Ldf_G22^2 - 2*LF_G22*LRD_G22*LSd_G22 - 4*Lad_G22*Laf_G22*Ldf_G22)) + (377*vR_G22*cos(delta_G22)*(LRD_G22*Laf_G22 - Lad_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22);
 diRd_G22dt = 377*iSq_G22*((RS_G22*cos(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) + (LSq_G22*omega_G22*sin(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22)) - 377*iSd_G22*((RS_G22*sin(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (LSq_G22*omega_G22*cos(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22)) - (377*vR_G22*(LSd_G22*Ldf_G22 - Lad_G22*Laf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) + (377*vTLRq_TL_1_22*cos(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (377*vTLRd_TL_1_22*sin(delta_G22)*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (377*Rkd_G22*iRd_G22*(Laf_G22^2 - LF_G22*LSd_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) - (377*RF_G22*iF_G22*(LSd_G22*Ldf_G22 - Lad_G22*Laf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22) + (377*Laq_G22*iRq_G22*omega_G22*(LF_G22*Lad_G22 - Laf_G22*Ldf_G22))/(LF_G22*Lad_G22^2 + LRD_G22*Laf_G22^2 + LSd_G22*Ldf_G22^2 - LF_G22*LRD_G22*LSd_G22 - 2*Lad_G22*Laf_G22*Ldf_G22);
@@ -173,8 +97,8 @@ diLd_L22dt = 377*dphidt*iLq_L22 + (377*(vTLRd_TL_1_22 - RL_L22*iLd_L22))/LL_L22;
 diLq_L22dt = (377*(vTLRq_TL_1_22 - RL_L22*iLq_L22))/LL_L22 - 377*dphidt*iLd_L22;
 diLd_L23dt = 377*dphidt*iLq_L23 + (377*(vTLRd_TL_1_23 - RL_L23*iLd_L23))/LL_L23;
 diLq_L23dt = (377*(vTLRq_TL_1_23 - RL_L23*iLq_L23))/LL_L23 - 377*dphidt*iLd_L23;
-dvTLLd_TL_1_21dt = -(377*(iLd_L1 + iTLMd_TL_1_21 + iTLMd_TL_1_22 + iTLMd_TL_1_23 - CTL_TL_1_21*dphidt*vTLLq_TL_1_21 - CTL_TL_1_22*dphidt*vTLLq_TL_1_21 - CTL_TL_1_23*dphidt*vTLLq_TL_1_21))/(CTL_TL_1_21 + CTL_TL_1_22 + CTL_TL_1_23);
-dvTLLq_TL_1_21dt = -(377*(iLq_L1 + iTLMq_TL_1_21 + iTLMq_TL_1_22 + iTLMq_TL_1_23 + CTL_TL_1_21*dphidt*vTLLd_TL_1_21 + CTL_TL_1_22*dphidt*vTLLd_TL_1_21 + CTL_TL_1_23*dphidt*vTLLd_TL_1_21))/(CTL_TL_1_21 + CTL_TL_1_22 + CTL_TL_1_23);
+dvTLLd_TL_1_21dt = 377*stat*iLd_Lsc-(377*(iLd_L1 + iTLMd_TL_1_21 + iTLMd_TL_1_22 + iTLMd_TL_1_23 - CTL_TL_1_21*dphidt*vTLLq_TL_1_21 - CTL_TL_1_22*dphidt*vTLLq_TL_1_21 - CTL_TL_1_23*dphidt*vTLLq_TL_1_21))/(CTL_TL_1_21 + CTL_TL_1_22 + CTL_TL_1_23);
+dvTLLq_TL_1_21dt = 377*stat*iLq_Lsc-(377*(iLq_L1 + iTLMq_TL_1_21 + iTLMq_TL_1_22 + iTLMq_TL_1_23 + CTL_TL_1_21*dphidt*vTLLd_TL_1_21 + CTL_TL_1_22*dphidt*vTLLd_TL_1_21 + CTL_TL_1_23*dphidt*vTLLd_TL_1_21))/(CTL_TL_1_21 + CTL_TL_1_22 + CTL_TL_1_23);
 diTLMd_TL_1_21dt = 377*dphidt*iTLMq_TL_1_21 - (377*(vTLRd_TL_1_21 - vTLLd_TL_1_21 + RTL_TL_1_21*iTLMd_TL_1_21))/LTL_TL_1_21;
 diTLMq_TL_1_21dt = - 377*dphidt*iTLMd_TL_1_21 - (377*(vTLRq_TL_1_21 - vTLLq_TL_1_21 + RTL_TL_1_21*iTLMq_TL_1_21))/LTL_TL_1_21;
 dvTLRd_TL_1_21dt = 377*dphidt*vTLRq_TL_1_21 - (377*(iLd_L21 + iLd_PV21 - iTLMd_TL_1_21))/CTL_TL_1_21;
@@ -187,13 +111,27 @@ diTLMd_TL_1_23dt = 377*dphidt*iTLMq_TL_1_23 - (377*(vTLRd_TL_1_23 - vTLLd_TL_1_2
 diTLMq_TL_1_23dt = - 377*dphidt*iTLMd_TL_1_23 - (377*(vTLRq_TL_1_23 - vTLLq_TL_1_21 + RTL_TL_1_23*iTLMq_TL_1_23))/LTL_TL_1_23;
 dvTLRd_TL_1_23dt = 377*dphidt*vTLRq_TL_1_23 + (377*(iSd_G23 - iLd_L23 + iTLMd_TL_1_23))/CTL_TL_1_23;
 dvTLRq_TL_1_23dt = (377*(iSq_G23 - iLq_L23 + iTLMq_TL_1_23))/CTL_TL_1_23 - 377*dphidt*vTLRd_TL_1_23;
+% IPV = (PPV + 1i*QPV)/(Vdref(2) + 1i*Vqref(2));
+% idref = real(IPV); iqref = imag(IPV);
+% diLd_PV21dt = -(iLd_PV21 - idref);
+% diLq_PV21dt = -(iLq_PV21 - iqref);
 diLd_PV21dt = 377*dphidt*iLq_PV21 + (377*(vTLRd_TL_1_21 - RL_PV21*iLd_PV21))/LL_PV21;
 diLq_PV21dt = (377*(vTLRq_TL_1_21 - RL_PV21*iLq_PV21))/LL_PV21 - 377*dphidt*iLd_PV21;
-% diLd_PV21dt = -(iLd_PV21 - idref)-0.1*iLdInt;%377*dphidt*iLq_PV21 + (377*(vTLRd_TL_1_21 - RL_PV21*iLd_PV21))/LL_PV21;
-% diLq_PV21dt = -(iLq_PV21 - iqref)-0.1*iLqInt;%(377*(vTLRq_TL_1_21 - RL_PV21*iLq_PV21))/LL_PV21 - 377*dphidt*iLd_PV21;
-% diLdIntdt = (iLd_PV21 - idref);
-% diLqIntdt = (iLq_PV21 - iqref);
 
+
+% ddeltaInt_G22dt = delta_G22 - x220(end-1);
+% domegaInt_G22dt = omega_G22 - x220(end);
+% diFInt_G22dt = iF_G22 - x220(end-2);
+% 
+% ddeltaInt_G23dt = delta_G23 - x230(end-1);
+% domegaInt_G23dt = omega_G23 - x230(end);
+% diFInt_G23dt = iF_G23 - x230(end-2);
+if strcmp(status, 'inter')
+    Rsc = 0.00133;%*300; 
+    Lsc = 0.010516;%*300;
+    diLd_Lscdt = 377*dphidt*iLq_Lsc + (377*(real(Vinf)-vTLLd_TL_1_21-1 - Rsc*iLd_Lsc))/Lsc;
+    diLq_Lscdt = (377*(imag(Vinf)-vTLLq_TL_1_21 - Rsc*iLq_Lsc))/Lsc - 377*dphidt*iLd_Lsc;
+end
 dx = [diSd_G22dt
 diSq_G22dt
 diRd_G22dt
@@ -231,14 +169,9 @@ diTLMq_TL_1_23dt
 dvTLRd_TL_1_23dt
 dvTLRq_TL_1_23dt
 diLd_PV21dt
-diLq_PV21dt
-% diLdIntdt
-% diLqIntdt
-];
-
+diLq_PV21dt];
+if strcmp(status, 'inter')
+    dx = [dx;diLd_Lscdt;diLq_Lscdt];
 end
-
+dx = double(dx);
 end
-
-% A = jacobian(dx,x);
-% A1 = vpa(subs(A,x,x0),4);

@@ -18,37 +18,9 @@ mpc.baseMVA = 4;
 
 %% bus data
 %t =0;
-Vmax = 1.02; Vmin = 0.97;
-%	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
-mpc.bus = [
-1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
-3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-11	1	0.22	0.01	0	0	1	1	0	0.46	1	Vmax	Vmin
-12	1	0.14	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
-13	1	0.16	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
-14	1	0.706425	0.63981875	0	0	1	1	0	0.46	1	Vmax	Vmin
-15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
-16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
-17	1	0.14	0.01	0	0	1	1	0	0.208	1	Vmax	Vmin
-18	1	0.28	0.1	0	0	1	1	0	0.208	1	Vmax	Vmin
-19	1	0.78	0.42	0	0	1	1	0	0.208	1	Vmax	Vmin
-20	1	-1.75	-1.4	0	0	1	1	0	2.4	1	Vmax	Vmin
-21	1	-3.5	-0.7*4	0	0	1	1	0	2.4	1	Vmax	Vmin
-22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
-];
-
-
-%%
-%at t=7000sec
+Vmax = 1.2; Vmin = 0.9; 
+Pg = -3.5; Qg = -0.01;
+% Pg = 0; Qg = 0;
 %	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
 % mpc.bus = [
 % 1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
@@ -61,20 +33,50 @@ mpc.bus = [
 % 8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
 % 9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
 % 10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-% 11	1	0.26	0.015	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 12	1	0.25	0.11	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 13	1	0.2	0.1	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 14	1	0.886425	0.82981875	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 11	1	0.22	0.01	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 12	1	0.14	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 13	1	0.16	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 14	1	0.706425	0.63981875	0	0	1	1	0	0.46	1	Vmax	Vmin
 % 15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
 % 16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 17	1	0.26	0.03	0	0	1	1	0	0.208	1	Vmax	Vmin
-% 18	1	0.59	0.2	0	0	1	1	0	0.208	1	Vmax	Vmin
-% 19	1	0.93	0.43	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 17	1	0.14	0.01	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 18	1	0.28	0.1	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 19	1	0.78	0.42	0	0	1	1	0	0.208	1	Vmax	Vmin
 % 20	1	0	0	0	0	1	1	0	2.4	1	Vmax	Vmin
-% 21	1	-0.8	-0.01	0	0	1	1	0	2.4	1	Vmax	Vmin
+% 21	1	Pg	Qg	0	0	1	1	0	2.4	1	Vmax	Vmin
 % 22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
 % 23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
 % ];
+
+
+%%
+%at t=7000sec
+%	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
+mpc.bus = [
+1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
+3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+11	1	0.26	0.015	0	0	1	1	0	0.46	1	Vmax	Vmin
+12	1	0.25	0.11	0	0	1	1	0	0.46	1	Vmax	Vmin
+13	1	0.2	0.1	0	0	1	1	0	0.46	1	Vmax	Vmin
+14	1	0.886425	0.82981875	0	0	1	1	0	0.46	1	Vmax	Vmin
+15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
+16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
+17	1	0.26	0.03	0	0	1	1	0	0.208	1	Vmax	Vmin
+18	1	0.59	0.2	0	0	1	1	0	0.208	1	Vmax	Vmin
+19	1	0.93	0.43	0	0	1	1	0	0.208	1	Vmax	Vmin
+20	1	0	0	0	0	1	1	0	2.4	1	Vmax	Vmin
+21	1	-0.8	-0.01	0	0	1	1	0	2.4	1	Vmax	Vmin
+22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
+];
 %%
 %worst case loading
 %	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
@@ -99,7 +101,7 @@ mpc.bus = [
 % 18	1	0.59	0.2	0	0	1	1	0	0.208	1	Vmax	Vmin
 % 19	1	0.94	0.43	0	0	1	1	0	0.208	1	Vmax	Vmin
 % 20	1	0	0	0	0	1	1	0	2.4	1	Vmax	Vmin
-% 21	1	-0.8	-0.01	0	0	1	1	0	2.4	1	Vmax	Vmin
+% 21	1	-0.8	-0.01	0	0	1	1	0	2.4	1	XiaVmax	Vmin
 % 22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
 % 23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
 % ];
@@ -107,8 +109,9 @@ mpc.bus = [
 %% generator data
 %	bus	Pg	Qg	Qmax	Qmin	Vg	mBase	status	Pmax	Pmin	Pc1	Pc2	Qc1min	Qc1max	Qc2min	Qc2max	ramp_agc	ramp_10	ramp_30	ramp_q	apf
 mpc.gen = [
+% 21	10	0	10	-10	1	4	1	4	0	0	0	0	0	0	0	0	0	0	0	0
 22	4	0	4	-4	1	4	1	4	0	0	0	0	0	0	0	0	0	0	0	0
-23	1	0	1	-1	1.02	4	1	1	0	0	0	0	0	0	0	0	0	0	0	0
+23	1	0	1	-1	1	4	1	1	0	0	0	0	0	0	0	0	0	0	0	0
 ];
 
 %% branch data
@@ -137,14 +140,15 @@ mpc.branch = [
 7	22	6.17517E-05	9.78786E-05	1.61939E-05	7	7	7	0	0	1	-360	360
 2	23	0.151228733	0.053875236	7.35131E-09	7	7	7	0	0	1	-360	360
 ];
-
 %%-----  OPF Data  -----%%
 %% generator cost data
 %	1	startup	shutdown	n	x1	y1	...	xn	yn
 %	2	startup	shutdown	n	c(n-1)	...	c0
 mpc.gencost = [
-	2	1500	0	3	0.11	5	150;
-	2	2000	0	3	0.085	1.2	600;
+%     2	0000	0	0	0.00	0	0;
+% 	2	1500	0	3	0.11	10	150;
+    2	1500	0	3	0.11	5	150;
+    2	1500	0	3	0.11	5	150;
 ];
 
 end 

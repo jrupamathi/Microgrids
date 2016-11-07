@@ -2,12 +2,14 @@
 clear all
 addpath('../Parameters/')
 
-load('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','RR_G22','RF_G22','H_G22','B_G22')
+load('G22.mat','Lad_G22','Laf_G22','Laq_G22','Ldf_G22','LSd_G22','LSq_G22','LRD_G22','LF_G22','LRQ_G22','RS_G22','Rkd_G22','RF_G22','H_G22','B_G22','Rkq_G22',...
+    'K1_G22','K2_G22','K3_G22','delta_G22_ref','omega_G22_ref','iF_G22_ref',...
+    'tauL_G22_ref','vR_G22_ref');
 % load('TL1_2.mat','R_TL1_2','L_TL1_2','C_TL1_2');
 H=H_G22;
 B = B_G22;
 rs=RS_G22;
-rr=RR_G22;
+rr=Rkd_G22;
 rf=RF_G22;
 Ld=LSd_G22;
 LD=LRD_G22;
@@ -18,7 +20,7 @@ Lad=Lad_G22;
 Laf=Laf_G22;
 Ldf=Ldf_G22;
 Laq=Laq_G22;
-rq = RR_G22;
+rq = Rkq_G22;
 F = B;
 
 syms delta omega iD iF iQ vf Tm vds vqs Id Iq real
@@ -51,8 +53,8 @@ Vmag = 1.00; Vang = 0*pi/180;%G22
 
 Vdref = Vmag*cos(Vang);
 Vqref = Vmag*sin(Vang);
-% Pref = 1.86/4;%Gen22%
-% Qref = 3.98/4;%Gen22
+Pref = 1.86/4;%Gen22%
+Qref = 3.98/4;%Gen22
 % Pref = 1/4;%0.865196;
 % Qref = -0.36/4;%;0.43658;
 
@@ -61,8 +63,8 @@ Vqref = Vmag*sin(Vang);
 % Pref = 1/4;%0.865196;
 % Qref = -0.39/4;%;0.43658;
 
-Pref = 0.22/4;%Gen22% %PV with switches and Batt
-Qref = 0.26/4;%Gen22
+% Pref = 0.22/4;%Gen22% %PV with switches and Batt
+% Qref = 0.26/4;%Gen22
 % Pref = 1/4;%0.865196;
 % Qref = -0.47/4;%;0.43658;
 

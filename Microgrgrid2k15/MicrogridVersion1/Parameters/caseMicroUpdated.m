@@ -18,32 +18,31 @@ mpc.baseMVA = 4;
 %t =0;
 Vmax = 1.02; Vmin = 0.97;
 %	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
-% mpc.bus = [
-% 1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-% 6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-% 9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-% 10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-% 11	1	0.22	0.01	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 12	1	0.14	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 13	1	0.16	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 14	1	0.706425	0.63981875	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
-% 17	1	0.14	0.01	0	0	1	1	0	0.208	1	Vmax	Vmin
-% 18	1	0.28	0.1	0	0	1	1	0	0.208	1	Vmax	Vmin
-% 19	1	0.78	0.42	0	0	1	1	0	0.208	1	Vmax	Vmin
-% 20	1	0	0	0	0	1	1	0	2.4	1	Vmax	Vmin
-% 21	1	-3.5	-0.01	0	0	1	1	0	2.4	1	Vmax	Vmin
-% 22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-% 23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
-% ];
-
+mpc.bus = [
+1	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
+3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+11	1	0.22	0.01	0	0	1	1	0	0.46	1	Vmax	Vmin
+12	1	0.14	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
+13	1	0.16	0.09	0	0	1	1	0	0.46	1	Vmax	Vmin
+14	1	0.706425	0.63981875	0	0	1	1	0	0.46	1	Vmax	Vmin
+15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
+16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
+17	1	0.14	0.01	0	0	1	1	0	0.208	1	Vmax	Vmin
+18	1	0.28	0.1	0	0	1	1	0	0.208	1	Vmax	Vmin
+19	1	0.78	0.42	0	0	1	1	0	0.208	1	Vmax	Vmin
+20	1	0	0	0	0	1	1	0	2.4	1	Vmax	Vmin
+21	1	-3.5	-0.01	0	0	1	1	0	2.4	1	Vmax	Vmin
+22	2	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
+];
 
 %%
 %at t=7000sec
@@ -76,31 +75,31 @@ Vmax = 1.02; Vmin = 0.97;
 %%
 %worst case loading
 %	bus_i	type	Pd	Qd	Gs	Bs	area	Vm	Va	baseKV	zone	Vmax	Vmin
-mpc.bus = [
-1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
-3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
-11	1	0.28	0.015	0	0	1	1	0	0.46	1	Vmax	Vmin
-12	1	0.25	0.11	0	0	1	1	0	0.46	1	Vmax	Vmin
-13	1	0.21	0.1	0	0	1	1	0	0.46	1	Vmax	Vmin
-14	1	0.996425	0.84981875	0	0	1	1	0	0.46	1	Vmax	Vmin
-15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
-16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
-17	1	0.26	0.03	0	0	1	1	0	0.208	1	Vmax	Vmin
-18	1	0.59	0.2	0	0	1	1	0	0.208	1	Vmax	Vmin
-19	1	0.94	0.43	0	0	1	1	0	0.208	1	Vmax	Vmin
-20	1	-1.75	-1.4	0	0	1	1	0	2.4	1	Vmax	Vmin
-21	1	-3.5	-2.81	0	0	1	1	0	2.4	1	Vmax	Vmin
-22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
-23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
-];
+% mpc.bus = [
+% 1	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 2	1	1.186425	0.61481875	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 3	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 4	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 5	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+% 6	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 7	1	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 8	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+% 9	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+% 10	1	0	0	0	0	1	1	0	4.16	1	Vmax	Vmin
+% 11	1	0.28	0.015	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 12	1	0.25	0.11	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 13	1	0.21	0.1	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 14	1	0.996425	0.84981875	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 15	1	2.5	1.2	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 16	1	0.09	0.042	0	0	1	1	0	0.46	1	Vmax	Vmin
+% 17	1	0.26	0.03	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 18	1	0.59	0.2	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 19	1	0.94	0.43	0	0	1	1	0	0.208	1	Vmax	Vmin
+% 20	1	-1.75	-1.4	0	0	1	1	0	2.4	1	Vmax	Vmin
+% 21	1	-3.5	-2.81	0	0	1	1	0	2.4	1	Vmax	Vmin
+% 22	3	0	0	0	0	1	1	0	13.8	1	Vmax	Vmin
+% 23	2	0	0	0	0	1	1	0	0.46	1	Vmax	Vmin
+% ];
 
 %% generator data
 %	bus	Pg	Qg	Qmax	Qmin	Vg	mBase	status	Pmax	Pmin	Pc1	Pc2	Qc1min	Qc1max	Qc2min	Qc2max	ramp_agc	ramp_10	ramp_30	ramp_q	apf

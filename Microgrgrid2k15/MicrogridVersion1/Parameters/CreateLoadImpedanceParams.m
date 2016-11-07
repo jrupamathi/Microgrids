@@ -1,9 +1,15 @@
 %Voltages
 %Case 1: When no shunt capacitance
-filename = 'Voltage_withActualshunts.csv';
+% filename = 'Voltage_withActualshunts.csv';
 %Extracting voltages
-file1 = load(filename,'variable');
-V = file1(:,3);
+filename1 = 'RedBookBranchDataFile/Microgrid15_CONNvolt.csv';
+filename2 = 'RedBookBranchDataFile/Microgrid15_islandvolt.csv';
+                
+file1 = load(filename2,'variable');
+V = file1(:,2);
+%Ran normal OF to find voltage magnitudes of caseMicroUpdated islanded mode
+%- 10/29/2016
+
 
 %%
 PL_PV21= -3.5/4;

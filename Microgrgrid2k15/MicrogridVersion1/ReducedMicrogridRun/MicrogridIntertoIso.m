@@ -16,10 +16,10 @@ load('L21.mat', 'RL_L21', 'LL_L21');
 load('L22.mat', 'RL_L22', 'LL_L22');
 load('L23.mat', 'RL_L23', 'LL_L23');
 load('PV21.mat', 'RL_PV21', 'LL_PV21');
-% RL_PV21= -4; 
-% LL_PV21 = -2.7;
+RL_PV21= -4; 
+LL_PV21 = -2.7;
 % RL_PV21 = -4.635; 
-LL_PV21 = -0.7;
+% LL_PV21 = -0.7;
 
 Rsc = 0.00133*300; Lsc = 0.010516*300;
 
@@ -74,7 +74,7 @@ x0 = [0.276148
     -0.0645651
     0.00207539];
 tic
-faulton = 0; faultoff = 2;
+faulton = 2; faultoff = 2;
 
 [t,x]=ode45(@MilosSmTlWorking,[0,2],x0);
 time  = toc

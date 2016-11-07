@@ -6,7 +6,7 @@ close all
 set(0,'defaultlinelinewidth',1.5)
 
 
-addpath('../Parameters')
+addpath('../Parameters/')
 
 load('G23.mat','Lad_G23','Laf_G23','Laq_G23','Ldf_G23','LSd_G23','LSq_G23','LRD_G23','LF_G23','LRQ_G23','RS_G23','Rkd_G23','Rkq_G23','RF_G23','H_G23','B_G23',...
     'K11_G23','K12_G23','K13_G23','K14_G23','K15_G23','K16_G23','K17_G23',...

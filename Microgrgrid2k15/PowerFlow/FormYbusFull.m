@@ -77,7 +77,7 @@ end
 %     end
 % end
 %In order to have TL capacitances intact
-Yshunt = Yshunt - [0.03 0.01 0.01 0.01];
+Yshunt = Yshunt;% - [0.03 0.01 0.01 0.01];
 Zsh = 1./Yshunt;
 Rsh = real(Zsh); Lsh = imag(Zsh);
 %%
